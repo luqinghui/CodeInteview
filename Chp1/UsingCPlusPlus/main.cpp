@@ -1,138 +1,33 @@
 #include <iostream>
+#include <string>
 
-//define linkedlist
-template<class T>
-class Node {
-public:
-	Node<T> *next = nullptr;
-	T data;
-	Node(T d) {
-		data = d;
+using namespace std;
+
+int main() {
+	string str;
+	cin >> str;
+
+	char word[4] = { 0 };
+
+	for (int i = 0; i < str.length(); i++) {
+		word[i] = str[i];
 	}
-	void appendToTail(T d) {
-		Node<T> *end = new Node<T>(d);
-		Node<T> *n = this;
-		while (n->next != nullptr) {
-			n = n->next;
-		}
-		n->next = end;
-	}
-};
+	int carry[4] = { 25 + 25 * 25 + 25 * 25 * 25,	//第一个字母进位所乘的比例
+		25 + 25 * 25,								//第二个字母进位所乘的比例
+		25,											//第三个字母进位所乘比例
+		1											//第四个字母进位所乘比例
+	};
 
-template<class T>
-void removeRepeatedNode(Node<T> *head) {
-	Node<T> *p = head;
-	Node<T> *pre = head;
-	Node<T> *q = head->next;
+	int answer = 0;
+	if (word[0] - 'a' >= 0 && word[0] - 'z' < 0)
+		answer += (word[0] - 'a')*carry[0];
+	if (word[1] - 'a' >= 0 && word[1] - 'z' < 0)
+		answer += (word[1] - 'a')*carry[1] + 1;
+	if (word[2] - 'a' >= 0 && word[2] - 'z' < 0)
+		answer += (word[2] - 'a')*carry[2] + 1;
+	if (word[3] - 'a' >= 0 && word[2] - 'z' < 0)
+		answer += (word[3] - 'a')*carry[3] + 1;
 
-	while (p->next != nullptr) {
-		while (q != nullptr) {
-			if (p->data == q->data) {
-				pre->next = q->next;
-				q = q->next;
-			}
-			else {
-				q = q->next;
-				pre = pre->next;
-			}		
-		}
-
-		p = p->next;
-		q = p->next;
-		pre = p;
-	}
-}
-
-template<class T>
-void printLinkedList(Node<T> *head) {
-	while (head->next != nullptr) {
-		std::cout << head->data << "-->";
-		head = head->next;
-	}
-	std::cout << head->data << std::endl;
-}
-
-template<class T>
-T findKNode(Node<T> *head, T k) {
-	Node<T> *p = head;
-	int len = 0;
-	while (p != nullptr) {
-		len++;
-		p = p->next;
-	}
-	p = head;
-	for (int i = 0; i < len - k; i++)
-		p = p->next;
-
-	return p->data;
-
-}
-
-template<class T>
-void removeNode(Node<T> *head, T d) {
-
-}
-
-template<class T>
-Node<T>* splitByX(Node<T> *head, T x) {
-	Node<T> *first = head;
-	Node<T> *end = nullptr;
-	Node<T> *p = head;
-
-	while (p->next != nullptr)
-		p = p->next;
-	end = p;
-
-	p = head;
-
-	if (p->next == nullptr)
-		return first;
-	if (p->next->next == nullptr)
-		if (p->data > x && p->next->data < x) {
-			first->next = nullptr;
-			end->next = first;
-			return end;
-		}
-		else
-			return first;
-
-	Node<T> *pre = p;
-	p = p->next;
-	while (p != nullptr) {
-		if (p->data >= x) {
-			//放到尾部
-			pre->next = p->next;
-			p->next = nullptr;
-			end->next = p;
-			end = p;
-
-		}
-		p = p->next;
-		pre = pre->next;
-	}
-	return first;
-}
-
-template<class T>
-void add(Node<T> *n1, Node<T> *n2, Node<T> result) {
-
-}
-
-
-int main(void) {
-	Node<int> *head = new Node<int>(1);
-	head->appendToTail(2);
-	head->appendToTail(6);
-	head->appendToTail(1);
-	head->appendToTail(3);
-	head->appendToTail(7);
-	head->appendToTail(4);
-
-	printLinkedList(head);
-
-	splitByX(head, 3);
-
-	printLinkedList(head);
-
+	cout << answer << endl;
 	return 0;
 }
